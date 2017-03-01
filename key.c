@@ -76,6 +76,8 @@ int main (int argc, char **argv)
 
         /* Only read the key press event */
         if (ev.value == 1 && ev.type == EV_KEY) {
+                  ev.code = ev.code-100;
+   
             printf ("Keycode %d pressed\n", ev.code);
 
             /* Look for a suitable command to execute */
