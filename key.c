@@ -56,35 +56,72 @@ int main (int argc, char **argv)
 
     /* Open device */
     if ((fd = open (device, O_RDONLY)) == -1)
-        printf("%s is not a vaild device.\n", device);
-
-    /* Print Device Name */
-    ioctl(fd, EVIOCGNAME(sizeof(name)), name);
-    printf("Reading key input from %s (%s)\n", device, name);
-
-    /* load config */
-    if(loadconfig(&map) != 0) {
-        printf("Error loading config file!\n");
-        return 0;
-    }
-
+    
     mapelements = (sizeof(map)/sizeof(keymap));
     printf("Loaded config items\n");
 
-    while (1) {
+    mapelements = (sizeof(map)/sizeof(keymap));
+    printf("Loaded config items\n");
+      while (1) {
+
         rd = read (fd, &ev, size);
 
+　
+
         /* Only read the key press event */
+
         if (ev.value == 1 && ev.type == EV_KEY) {
+
             printf ("Keycode %d pressed\n", ev.code);
 
+　
+
             /* Look for a suitable command to execute */
+
             for (i = 0; i < mapelements; i++) {
+
                 if (ev.code == map[i].code)
+
                     system(map[i].command);
+
             }
+
         }
+
+　
+
+　
+
+        /* Only read the key press event */
+
+        if (ev.code == REL_WHEEL && ev.type == EV_REL) {
+
+          ev.code = ev.value+2;
+
+            printf ("Keycode %d pressed\n", ev.code);
+
+　
+
+            /* Look for a suitable command to execute */
+
+            for (i = 0; i < mapelements; i++) {
+
+                if (ev.code == map[i].code)
+
+                    system(map[i].command);
+
+            }
+
+        }
+
+　
+
+　
+
     }
 
+　
+
     return 0;
+
 }
